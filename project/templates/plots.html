@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block head_js %}
+{{ resources | safe }}
+<script type="text/javascript">
+    function plot(route, id) {
+        fetch(route)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(item) {
+                return Bokeh.embed.embed_item(item, id);
+            })
+    }
+</script>
+{% endblock %}
+
+{% block hero_content %}
+{% for plot in plots %}
+<a href="{{ url_for('main.plot', y=plot) }}">
+    <div class="content">
+        <p class="title">{{ plot.capitalize() }}</p>
+
+        <div class="content">
+            <figure class="image" id='{{ plot }}'>
+            </figure>
+            <script>
+                plot('/bokeh/{{ plot }}', '{{ plot }}')
+            </script>
+        </div>
+    </div>
+</a>
+{% endfor %}
+{% endblock %}
