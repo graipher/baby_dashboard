@@ -4,7 +4,9 @@ A simple dashboard for data related to your baby's growth.
 
 Uses flask and SQLAlchemy for the webapp and bokeh for data visualization.
 
-Note that this currenlty uses HTTP, so e.g. your password are transmitted in clear text. **Do not use this app as is on the web**. If it is running behind a NAT on your home network it should be fine.
+![Baby Dashboard Weight](baby_dashboard.png)
+
+Note that this currently uses HTTP, so e.g. your password are transmitted in clear text. **Do not use this app as is on the web**. If it is running behind a NAT on your home network it should be fine.
 
 ## Setup
 
