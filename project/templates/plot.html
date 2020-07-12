@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block head_js %}
+{{ resources | safe }}
+<script type="text/javascript">
+    function plot(route, id) {
+        fetch(route)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(item) {
+                return Bokeh.embed.embed_item(item, id);
+            })
+    }
+</script>
+{% endblock %}
+
+{% block hero_content %}
+<figure class="image" id='{{ plot }}'>
+</figure>
+<script>
+    plot('/plots/{{ plot }}', '{{ plot }}')
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="notification is-danger">
+        {{ messages[0] }}.
+    </div>
+    {% endif %}
+    {% endwith %}
+    <button class="button is-info is-fullwidth" onclick="getElementById('add_data').classList.toggle('is-active')">Add data</button>
+</div>
+<div class="modal" id="add_data">
+    <div class="modal-background" onclick="getElementById('add_data').classList.toggle('is-active')"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="title">Add new data</p>
+            <button class="modal-close is-large" aria-label="close" onclick="getElementById('add_data').classList.toggle('is-active')"></button>
+        </header>
+        <form method="POST" action="/{{ plot }}">
+            <section class="modal-card-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="date" name="date" placeholder="Date">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="text" name="weight" placeholder="Weight in g" autofocus="">
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <div class="field is-grouped is-grouped-right">
+                    <div class="control">
+                        <button class="button is-block is-info is-fullwidth">Submit</button>
+                    </div>
+                    <div class="control">
+                        <button type="button" class="button is-block is-fullwidth" onclick="getElementById('add_data').classList.toggle('is-active')">Cancel</button>
+                    </div>
+                </div>
+            </footer>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}
