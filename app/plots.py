@@ -19,18 +19,13 @@ days = 1000 * 60 * 60 * 24  # milliseconds
 
 
 def get_data(name, index=False):
-    if name == "weight":
+    if name in ["weight", "height"]:
         try:
-            date, weight = zip(*[(w.date, w.weight) for w in current_user.weight])
+            date, values = zip(*[(x.date, x.value) for x in current_user.children[0].measurements.filter_by(m_type=name)])
+            print(values)
         except ValueError:
-            date, weight = [], []
-        return ColumnDataSource({"Date": date, "Weight": weight})
-    elif name == "height":
-        try:
-            date, height = zip(*[(w.date, w.height) for w in current_user.height])
-        except ValueError:
-            date, height = [], []
-        return ColumnDataSource({"Date": date, "Height": height})
+            date, values = [], []
+        return ColumnDataSource({"Date": date, name.capitalize(): values})
     df = pd.read_csv(f"{name}.csv")
     df["Date"] = pd.to_datetime(df["Date"], dayfirst=True)
     ds = ColumnDataSource(df.set_index("Date"), name=name)
@@ -59,10 +54,12 @@ def setup_figure(xlabel, ylabel):
         y_axis_label=ylabel,
         x_axis_type="datetime",
         tools="save,pan,wheel_zoom,box_zoom,reset",
+        toolbar_location="above",
         active_drag=None,
         active_scroll=None,
-        sizing_mode="stretch_both",
-        #aspect_ratio=4 / 3,
+        sizing_mode="stretch_width",
+        #aspect_ratio=16/9,
+        min_border_left=0,
     )
     p.toolbar.autohide = True
     p.xaxis.formatter = DatetimeTickFormatter(days=["%d.%m"])

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block hero_content %}
+<h1 class="title">
+    Welcome, {{ name }}!
+</h1>
+
+<div class="column is-4 is-offset-4">
+    {% for child in children: %}
+    <div class="card">
+        <div class="card-header">
+            <div class="card-header-title">
+                {{ child.name }}
+            </div>
+        </div>
+        <div class="card-content has-text-left  pb-2 mb-2">
+            <time datetime={{ child.birth_date }}>{{ child.birth_date.strftime("%A, %d. %B %Y") }}</time></br>
+            {{ child.gender.name.capitalize() }}</br>
+            <span class="tag" style="background-color: {{ child.color }}"></span>
+        </div>
+    </div>
+    <div class="content"></div>
+    {% endfor %}
+
+    <div class="button is-info is-fullwidth" onclick="getElementById('add_child').classList.toggle('is-hidden')">
+        +
+    </div>
+    <div class="content"></div>
+
+    <div id="add_child" class="is-hidden">
+        <form method="POST" action="/profile">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-title">
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Name</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" type="text" name="name" placeholder="Name" autofocus="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content has-text-left  pb-2 mb-2">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Born</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" type="date" name="date" placeholder="Date of Birth" autofocus="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Gender</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select">
+                                        <select name="gender" autofocus="">
+                                            <option>Male</option>
+                                            <option>Female</option>
+                                            <option>Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Color</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input name="color" type="color" autofocus="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="button is-block is-primary is-fullwidth">Add Child</button>
+                </div>
+            </div>
+        </form>
+        <div>
+        </div>
+
+
+        {% endblock %}

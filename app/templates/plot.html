@@ -9,6 +9,13 @@
                 return response.json();
             })
             .then(function(item) {
+                let width = document.getElementById(id).getBoundingClientRect()["width"];
+                if (width < 200) {
+                    let refs = item["doc"]["roots"]["references"];
+                    let legend = refs.find(x => x["type"] == "Legend");
+                    legend["attributes"]["visible"] = false;
+                    console.log("Removing legend because window is too small");
+                }
                 return Bokeh.embed.embed_item(item, id);
             })
     }
@@ -16,11 +23,15 @@
 {% endblock %}
 
 {% block hero_content %}
-<figure class="image" id='{{ plot }}'>
-</figure>
-<script>
-    plot('/plots/{{ plot }}', '{{ plot }}')
+<h1 class="title">{{ plot.capitalize() }}</h1>
+
+<div class="content">
+    <figure class="image" id='{{ plot }}' style="margin-left: 0em;">
+    </figure>
+    <script>
+        plot('/bokeh/{{ plot }}', '{{ plot }}')
 </script>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -32,7 +43,7 @@
     </div>
     {% endif %}
     {% endwith %}
-    <button class="button is-info is-fullwidth" onclick="getElementById('add_data').classList.toggle('is-active')">Add data</button>
+    <button class="button is-primary is-fullwidth" onclick="getElementById('add_data').classList.toggle('is-active')">Add data</button>
 </div>
 <div class="modal" id="add_data">
     <div class="modal-background" onclick="getElementById('add_data').classList.toggle('is-active')"></div>
@@ -41,7 +52,7 @@
             <p class="title">Add new data</p>
             <button class="modal-close is-large" aria-label="close" onclick="getElementById('add_data').classList.toggle('is-active')"></button>
         </header>
-        <form method="POST" action="/{{ plot }}">
+        <form method="POST" action="/plots/{{ plot }}">
             <section class="modal-card-body">
                 <div class="field">
                     <div class="control">
@@ -50,7 +61,18 @@
                 </div>
                 <div class="field">
                     <div class="control">
-                        <input class="input" type="text" name="weight" placeholder="Weight in g" autofocus="">
+                        <input class="input" type="text" name="value" placeholder="Value" autofocus="">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <div class="select">
+                            <select name="child" autofocus="">
+                                {% for child in children %}
+                                <option>{{ child.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -60,7 +82,7 @@
                         <button class="button is-block is-info is-fullwidth">Submit</button>
                     </div>
                     <div class="control">
-                        <button type="button" class="button is-block is-fullwidth" onclick="getElementById('add_data').classList.toggle('is-active')">Cancel</button>
+                        <button type="reset" class="button is-block is-fullwidth" onclick="getElementById('add_data').classList.toggle('is-active')">Cancel</button>
                     </div>
                 </div>
             </footer>
