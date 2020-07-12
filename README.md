@@ -11,7 +11,7 @@ Note that this currenlty uses HTTP, so e.g. your password are transmitted in cle
 Clone the repository to a local folder
 
 ```
-git clone URL
+git clone https://github.com/graipher/baby_dashboard.git
 ```
 
 Create a virtual environment
