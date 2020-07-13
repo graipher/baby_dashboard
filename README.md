@@ -35,6 +35,8 @@ Initialize the database
 ./setup_db.py
 ```
 
+### Local development server
+
 Start the local development server
 
 ```
@@ -46,7 +48,18 @@ Visit the webpage
 ```
 http://localhost:5000
 ```
+### Running it in a docker container
 
-## Future
+This assumes that docker is already set up and running.
 
-Use a dockerized nginx instance instead of the built-in webserver.
+Build the image
+
+```
+docker build -t baby_dashboard ./
+```
+
+Run it as a self-restarting daemon
+
+```
+docker run -d -restart=always -p 80:80 -t baby_dashboard
+```
