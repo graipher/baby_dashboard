@@ -34,10 +34,8 @@ def get_data(name, index=False):
 
 def get_reference_data(name):
     ref = pd.read_csv(f"reference_{name}.csv")
-    df = pd.read_csv(f"{name}.csv")
-    df["Date"] = pd.to_datetime(df["Date"], dayfirst=True)
-    start, end = df["Date"].min(), df["Date"].max()
-    diff = (end - start).days // 7 + 1
+    start = current_user.children[0].birth_date
+    diff = (datetime.now() - start).days // 7 + 1
     ref["Date"] = start + pd.to_timedelta(ref["Week"], unit="W")
     ref = ref.set_index("Date").iloc[: diff + 1]
     if name == "weight":
