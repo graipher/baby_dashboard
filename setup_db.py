@@ -10,5 +10,6 @@ except ImportError:
 
 root = Path("project")
 
-if not (root / "db.sqlite").exists():
+if not (root / "db/db.sqlite").exists():
+    print("Create DB")
     db.create_all(app=create_app())
