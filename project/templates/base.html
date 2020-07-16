@@ -65,12 +65,11 @@
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a class="navbar-item" href="{{ url_for('main.plot', y='weight') }}">
-                            Weight
+                        {% for plot in plots %}
+                        <a class="navbar-item" href="{{ url_for('main.plot', y=plot) }}">
+                            {{ plot.capitalize() }}
                         </a>
-                        <a class="navbar-item" href="{{ url_for('main.plot', y='height') }}">
-                            Height
-                        </a>
+                        {% endfor %}
                         <hr class="navbar-divider">
                         <a class="navbar-item">
                             Report an issue
