@@ -40,11 +40,35 @@ def profile():
 def profile_post():
     name = request.form.get('name')
     date = pd.to_datetime(request.form.get('date'), errors="raise")
-    gender = request.form.get('gender')
+    gender = request.form.get('gender').lower()
     color = request.form.get('color')
     new_child = Child(name=name, birth_date=date,
-                      gender=gender.lower(), color=color)
+                      gender=gender, color=color)
     current_user.children.append(new_child)
+    db.session.commit()
+    return redirect(url_for('main.profile'))
+
+@main.route('/profile/edit/<id>')
+@login_required
+def profile_edit(id):
+    try:
+        child = current_user.children.filter_by(id=id).one()
+    except sqlalchemy.orm.exc.NoResultFound:
+        abort(404)
+    return render_template('profile_edit.html', child=child, plots=PLOTS)
+
+@main.route('/profile/edit/<id>', methods=["POST"])
+@login_required
+def profile_edit_post(id):
+    try:
+        child = current_user.children.filter_by(id=id).one()
+    except sqlalchemy.orm.exc.NoResultFound:
+        abort(404)
+    child.name = request.form.get('name')
+    child.birth_date = pd.to_datetime(request.form.get('date'), errors="raise")
+    child.gender = request.form.get('gender').lower()
+    child.color = request.form.get('color')
+    print(child)
     db.session.commit()
     return redirect(url_for('main.profile'))
 

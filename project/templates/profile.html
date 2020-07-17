@@ -12,6 +12,16 @@
             <div class="card-header-title">
                 {{ child.name }}
             </div>
+            <a href="{{ url_for('main.profile_edit', id=child.id) }}">
+                <span class="icon">
+                    <i class="fas fa-edit"></i>
+                </span>
+            </a>
+            <a href="">
+                <span class="icon has-text-danger">
+                    <i class="fas fa-trash"></i>
+                </span>
+            </a>
         </div>
         <div class="card-content has-text-left  pb-2 mb-2">
             <time datetime={{ child.birth_date }}>{{ child.birth_date.strftime("%A, %d. %B %Y") }}</time></br>
